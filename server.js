@@ -2,11 +2,17 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
+// The view engine to generate dynamic pages
+app.set('view engine', 'ejs');
+
 var lonelyPeople = [];
 var clientMap = new Map();
 
 app.get('/', function(req, res){
-  res.sendFile('static.html', {root:'public'});
+  res.render('static', {
+    clientCount: clientMap.size
+  })
+  //res.sendFile('static.html', {root:'public'});
 });
 
 io.on('connection', function(socket){
@@ -15,8 +21,11 @@ io.on('connection', function(socket){
   console.log('a player connected');
   roomNum = 0;
 
+  var playerNumber = 1;
+
   if (lonelyPeople.length > 0) {
     roomNum = lonelyPeople.pop();
+    playerNumber = 2;
   }
   else {
     numPlayers = clientMap.size;
@@ -29,6 +38,8 @@ io.on('connection', function(socket){
   clientMap.set(connectedPlayer, roomNum);
   socket.join('Room' + roomNum);
   console.log('in room ' + roomNum);
+
+  io.to(socket.id).emit("playernumber:" + playerNumber);
 
   socket.on('chat message', function(msg){
     console.log('message: ' + msg);
@@ -48,7 +59,7 @@ io.on('connection', function(socket){
 
 });
 
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 3001;
 http.listen(port, function(){
   console.log('listening on *:3000');
 });
