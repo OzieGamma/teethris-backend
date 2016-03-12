@@ -5,7 +5,7 @@ var io = require('socket.io')(http);
 var clientNumber = 0;
 
 app.get('/', function(req, res){
-  res.sendfile('static.html');
+  res.sendfile('public/static.html');
 });
 
 io.on('connection', function (socket) {
