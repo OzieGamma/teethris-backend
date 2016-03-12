@@ -2,51 +2,78 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
+// The view engine to generate dynamic pages
+app.set('view engine', 'ejs');
+
 var lonelyPeople = [];
-var clientMap = new Map();
+var clientMap = {};
+var numberRooms = 1;
 
 app.get('/', function(req, res){
-  res.sendFile('static.html', {root:'public'});
+  res.render('static', {
+    clientCount: Object.keys(clientMap).length
+  })
+  //res.sendFile('static.html', {root:'public'});
 });
 
 io.on('connection', function(socket){
 
-  connectedPlayer = socket.id;
   console.log('a player connected');
-  roomNum = 0;
 
-  if (lonelyPeople.length > 0) {
-    roomNum = lonelyPeople.pop();
-  }
-  else {
-    numPlayers = clientMap.size;
-    if (numPlayers % 2 == 0) {
-      numPlayers += 1;
-    }
-    roomNum = Math.ceil(numPlayers/2);
-  }
-
-  clientMap.set(connectedPlayer, roomNum);
-  socket.join('Room' + roomNum);
-  console.log('in room ' + roomNum);
+  assignToRoom(socket);
 
   socket.on('chat message', function(msg){
     console.log('message: ' + msg);
-    messageAuthor = socket.id;
-    roomToEmit = clientMap.get(messageAuthor);
+    roomToEmit = (clientMap['' + socket.id])[1];
     socket.broadcast.to('Room' + roomToEmit).emit('chat message', msg);
   });
 
   socket.on('disconnect', function(){
     console.log('player disconnected');
-    disconnectedPlayer = socket.id;
-    roomToEmpty = clientMap.get(disconnectedPlayer);
-    lonelyPeople.push(roomToEmpty);
-    clientMap.delete(disconnectedPlayer);
+    var c1 = socket;
+    var c2;
 
+    //console.log(clientMap);
+    console.log(Object.keys(clientMap).length);
+
+    roomToEmpty = (clientMap['' + c1.id])[1];
+    delete clientMap['' + c1.id];
+
+    console.log(Object.keys(clientMap).length);
+
+    for (var i = 0; i < Object.keys(clientMap).length; i++){
+      var socketId = (Object.keys(clientMap))[i];
+      console.log('hello');
+      console.log(socketId);
+      //console.log(clientMap[socketId]);
+      if ((clientMap[socketId])[1] == roomToEmpty) {
+        console.log('widow');
+        assignToRoom((clientMap[socketId])[0]);
+      }
+    }
   });
-
 });
+
+function assignToRoom(socket) {
+  lonelyPeople.push(socket);
+
+  console.log('#lonelyPeople: ' + lonelyPeople.length);
+
+  if (lonelyPeople.length >= 2) {
+    var c1 = lonelyPeople.pop();
+    var c2 = lonelyPeople.pop();
+
+    c1.join('Room' + numberRooms);
+    c2.join('Room' + numberRooms);
+
+    console.log('joined room: ' + numberRooms);
+
+    clientMap['' + c1.id] = [c1, numberRooms];
+    clientMap['' + c2.id] = [c2, numberRooms];
+
+    numberRooms++;
+  }
+}
 
 var port = process.env.PORT || 3000;
 http.listen(port, function(){
