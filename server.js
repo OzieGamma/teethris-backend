@@ -73,7 +73,7 @@ function assignToRoom(socket) {
 
   console.log('#lonelyPeople: ' + lonelyPeople.length);
 
-  if (lonelyPeople.length >= 10) {
+  if (lonelyPeople.length >= 2) {
     var c1 = lonelyPeople.pop();
     var c2 = lonelyPeople.pop();
 
