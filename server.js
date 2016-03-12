@@ -20,10 +20,15 @@ io.on('connection', function (socket) {
         console.log('['+localClientNumber+'] message: ' + msg);
         socket.broadcast.emit('msg', msg);
     });
+    
+    socket.on('meta', function (msg) {
+        console.log('['+localClientNumber+'] meta' + msg);
+        socket.broadcast.emit('meta', msg);
+    });
 
     socket.on('disconnect', function () {
         console.log('['+localClientNumber+'] disconnected');
-        socket.broadcast.emit('disconnect', 'BLABLA');
+        socket.broadcast.emit('meta', 'disconnect');
     });
 });
 
