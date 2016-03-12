@@ -26,7 +26,6 @@ app.get('/disconnectAll', function(req, res){
   console.log("Disconnect!");
 
   res.send("yolo");
-  //res.sendFile('static.html', {root:'public'});
 });
 
 io.on('connection', function(socket){
@@ -34,8 +33,6 @@ io.on('connection', function(socket){
   console.log('a player connected');
 
   assignToRoom(socket);
-
-
 
   socket.on('chat message', function(msg){
     console.log('message: ' + msg);
@@ -51,19 +48,22 @@ io.on('connection', function(socket){
     //console.log(clientMap);
     console.log(Object.keys(clientMap).length);
 
-    roomToEmpty = (clientMap['' + c1.id])[1];
-    delete clientMap['' + c1.id];
+    // Only if he is not disconnected yet
+    if(clientMap['' + c1.id]){
+      roomToEmpty = (clientMap['' + c1.id])[1];
+      delete clientMap['' + c1.id];
 
-    console.log(Object.keys(clientMap).length);
+      console.log(Object.keys(clientMap).length);
 
-    for (var i = 0; i < Object.keys(clientMap).length; i++){
-      var socketId = (Object.keys(clientMap))[i];
-      console.log('hello');
-      console.log(socketId);
-      //console.log(clientMap[socketId]);
-      if ((clientMap[socketId])[1] == roomToEmpty) {
-        console.log('widow');
-        assignToRoom((clientMap[socketId])[0]);
+      for (var i = 0; i < Object.keys(clientMap).length; i++){
+        var socketId = (Object.keys(clientMap))[i];
+        console.log('hello');
+        console.log(socketId);
+        //console.log(clientMap[socketId]);
+        if ((clientMap[socketId])[1] == roomToEmpty) {
+          console.log('widow');
+          assignToRoom((clientMap[socketId])[0]);
+        }
       }
     }
   });
