@@ -25,11 +25,13 @@ io.on('connection', function (socket) {
     socket.on('ready', function (msg) {
         console.log('['+localClientNumber+'] ready: ' + msg);
 
-        waitingClients.push(localClientNumber);
+        waitingClients.push(socket);
 
         if(waitingClients.length >= 2){
-              socket.emit('ready', "countdown");
-              waitingClients = [];
+          for(var nextSocket in waitingClients){
+            nextSocket.emit('ready', "countdown");
+            waitingClients = [];
+          }
         }
     });
 });
