@@ -11,5 +11,7 @@ class PlayersController < ApplicationController
     render json:Player.all
   end
 
-
+  def static
+    render file: "home.html"
+  end
 end

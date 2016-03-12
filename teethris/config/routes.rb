@@ -2,11 +2,14 @@ Rails.application.routes.draw do
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
+  # Homepage
+  # get '/kak', :to => redirect('/testWebSockets.html')
+
   get '/players/index', to: 'players#index'
   post '/players/create', to: 'players#create'
 
   # You can have the root of your site routed with "root"
-  # root 'welcome#index'
+  # get '/', to: 'players#static'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
