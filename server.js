@@ -6,7 +6,7 @@ var clientNumber = 0;
 
 io.on('connection', function (socket) {
     var localClientNumber = clientNumber;
-    var roomNumber = Math.floor(localClientNumber/2);
+    var roomNumber = 42;
     
     clientNumber += 1;
       
