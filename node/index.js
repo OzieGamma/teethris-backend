@@ -18,7 +18,7 @@ io.on('connection', function(socket){
 
   socket.on('chat message', function(msg){
     console.log('message: ' + msg);
-    roomToEmit = clientMap.get(socket.id)[1];
+    roomToEmit = (clientMap['' + socket.id])[1];
     socket.broadcast.to('Room' + roomToEmit).emit('chat message', msg);
   });
 
@@ -28,24 +28,24 @@ io.on('connection', function(socket){
     var c2;
 
     //console.log(clientMap);
-    console.log(clientMap.size);
+    console.log(Object.keys(clientMap).length);
 
-    roomToEmpty = clientMap.get(c1.id)[1];
-    delete clientMap.get(c1.id);
+    roomToEmpty = (clientMap['' + c1.id])[1];
+    delete clientMap['' + c1.id];
 
-    console.log(clientMap.size);
+    console.log(Object.keys(clientMap).length);
 
-    for (var i = 0; i < clientMap.size; i++){
-      var socketId = clientMap.get(clientMap.keys[i]);
+    for (var i = 0; i < Object.keys(clientMap).length; i++){
+      var socketId = (Object.keys(clientMap))[i];
       console.log('hello');
-      console.log(clientMap.get(socketId));
+      console.log(socketId);
       //console.log(clientMap[socketId]);
-      if (clientMap.get(socketId)[1] == roomToEmpty) {
+      if ((clientMap[socketId])[1] == roomToEmpty) {
         console.log('widow');
-        assignToRoom(clientMap.get(socketId)[0]);
+        assignToRoom((clientMap[socketId])[0]);
       }
     }
-  
+
 
   });
 });
@@ -64,8 +64,8 @@ function assignToRoom(socket) {
 
     console.log('joined room: ' + numberRooms);
 
-    clientMap.set(c1.id, [c1, numberRooms]);
-    clientMap.set(c2.id, [c2, numberRooms]);
+    clientMap['' + c1.id] = [c1, numberRooms];
+    clientMap['' + c2.id] = [c2, numberRooms];
 
     numberRooms++;
   }
