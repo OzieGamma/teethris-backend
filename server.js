@@ -22,7 +22,7 @@ io.on('connection', function (socket) {
 
     socket.on('disconnect', function () {
         console.log('['+localClientNumber+'] disconnected');
-        socket.broadcast.to('room$' + roomNumber).emit('msg', 'ESC');
+        socket.broadcast.to('room$' + roomNumber).emit('disconnect', 'BLABLA');
     });
 });
 
