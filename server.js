@@ -27,10 +27,10 @@ io.on('connection', function (socket) {
 
         waitingClients.push(localClientNumber);
 
-        if(waitingClients.length >= 2){
-          io.emit('ready', 'countdown');
-          waitingClients = [];
-        }
+        //if(waitingClients.length >= 2){
+        //  io.emit('ready', 'countdown');
+        //  waitingClients = [];
+        //}
     });
 });
 
