@@ -13,7 +13,6 @@ app.get('/', function(req, res){
   res.render('static', {
     clientCount: Object.keys(clientMap).length
   })
-  //res.sendFile('static.html', {root:'public'});
 });
 
 app.get('/disconnectAll', function(req, res){
@@ -74,7 +73,7 @@ function assignToRoom(socket) {
 
   console.log('#lonelyPeople: ' + lonelyPeople.length);
 
-  if (lonelyPeople.length >= 2) {
+  if (lonelyPeople.length >= 10) {
     var c1 = lonelyPeople.pop();
     var c2 = lonelyPeople.pop();
 
