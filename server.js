@@ -28,10 +28,7 @@ io.on('connection', function (socket) {
         waitingClients.push(socket);
 
         if(waitingClients.length >= 2){
-          for(var nextSocket in waitingClients){
-            nextSocket.emit('ready', "countdown");
-            waitingClients = [];
-          }
+          io.emit('ready', 'countdown');
         }
     });
 });
