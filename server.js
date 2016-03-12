@@ -29,9 +29,8 @@ io.on('connection', function (socket) {
 
         if(waitingClients.length >= 2){
           io.emit('ready', 'countdown');
+          waitingClients = [];
         }
-        
-        waitingClients = [];
     });
 });
 
