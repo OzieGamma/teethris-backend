@@ -5,7 +5,7 @@ var io = require('socket.io')(http);
 var clientNumber = 0;
 
 app.get('/', function(req, res){
-  res.sendfile('public/static.html');
+  res.sendfile('index.html');
 });
 
 io.on('connection', function (socket) {
@@ -19,16 +19,6 @@ io.on('connection', function (socket) {
     socket.on('msg', function (msg) {
         console.log('['+localClientNumber+'] message: ' + msg);
         socket.broadcast.emit('msg', msg);
-    });
-    
-    socket.on('meta', function (msg) {
-        console.log('['+localClientNumber+'] meta' + msg);
-        socket.broadcast.emit('meta', msg);
-    });
-
-    socket.on('disconnect', function () {
-        console.log('['+localClientNumber+'] disconnected');
-        socket.broadcast.emit('meta', 'disconnect');
     });
 });
 
