@@ -1,0 +1,23 @@
+# == Schema Information
+#
+# Table name: games
+#
+#  id         :integer          not null, primary key
+#  player1    :integer
+#  player2    :integer
+#  active     :boolean
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  player1: 
+  player2: 
+  active: false
+
+two:
+  player1: 
+  player2: 
+  active: false
