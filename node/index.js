@@ -1,26 +1,22 @@
-var express = require('express');
-var app = express();
-var expressWs = require('express-ws')(app);
+var app = require('express')();
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
 
-app.use(express.static('public'));
-
-app.use(function (req, res, next) {
-  console.log('middleware');
-  req.testing = 'testing';
-  return next();
+app.get('/', function(req, res){
+  res.sendFile('static.html', {root:'public'});
 });
 
-app.get('/', function(req, res, next){
-  console.log('get route', req.testing);
-  res.end();
-});
-
-app.ws('/', function(ws, req) {
-  ws.on('message', function(msg) {
-    console.log('moeke');
-    console.log(msg);
+io.on('connection', function(socket){
+  console.log('a user connected');
+  socket.on('chat message', function(msg){
+    console.log('message: ' + msg);
+    io.emit('chat message', msg);
   });
-  console.log('socket', req.testing);
+  socket.on('disconnect', function(){
+    console.log('user disconnected');
+  });
 });
 
-app.listen(3000);
+http.listen(3000, function(){
+  console.log('listening on *:3000');
+});
