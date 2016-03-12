@@ -79,8 +79,9 @@ function assignToRoom(socket) {
     var c2 = lonelyPeople.pop();
 
     c1.join('Room' + numberRooms);
-
     c2.join('Room' + numberRooms);
+    c1.broadcast.to('Room' + numberRooms).emit('chat message', 'player:player1');
+    c2.broadcast.to('Room' + numberRooms).emit('chat message', 'player:player2');
 
     console.log('joined room: ' + numberRooms);
 
