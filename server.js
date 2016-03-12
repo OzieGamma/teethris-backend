@@ -6,23 +6,20 @@ var clientNumber = 0;
 
 io.on('connection', function (socket) {
     var localClientNumber = clientNumber;
-    var roomNumber = 42;
-    
     clientNumber += 1;
       
-    socket.join('room$' + roomNumber);
     
     console.log('['+localClientNumber+'] Connected, Emiting id');
     socket.emit('id', localClientNumber);
 
     socket.on('msg', function (msg) {
         console.log('['+localClientNumber+'] message: ' + msg);
-        socket.broadcast.to('room$' + roomNumber).emit('msg', msg);
+        socket.broadcast.emit('msg', msg);
     });
 
     socket.on('disconnect', function () {
         console.log('['+localClientNumber+'] disconnected');
-        socket.broadcast.to('room$' + roomNumber).emit('disconnect', 'BLABLA');
+        socket.broadcast.emit('disconnect', 'BLABLA');
     });
 });
 
