@@ -9,7 +9,7 @@ io.on('connection', function (socket) {
     var roomNumber = Math.floor(localClientNumber/2);
     
     clientNumber += 1;
-    
+      
     socket.join('room$' + roomNumber);
     
     console.log('['+localClientNumber+'] Connected, Emiting id');
