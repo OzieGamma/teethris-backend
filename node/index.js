@@ -25,17 +25,11 @@ io.on('connection', function(socket){
     console.log('player disconnected');
     disconnectedPlayer = socket.id;
     roomToEmpty = clientMap.get(messageAuthor);
-    clientMap.remove(disconnectedPlayer);
-
-    for (var [playerId, roomNum] of clientMap.entries) {
-      if (roomNum == roomToEmpty) {
-        clientMap.remove(playerId);
-      }
-    }
+    clientMap.delete(disconnectedPlayer);
 
     for (var k in clientMap){
     if (clientMap.hasOwnProperty(k)) {
-         clientMap.remove(playerId);
+         clientMap.delete(playerId);
     }
     }
 
@@ -52,7 +46,7 @@ function assignToRoom(playerId, socket) {
   if (numPlayers % 2 == 0) {
     numPlayers += 1;
   }
-  roomNum = numPlayers/2;
+  roomNum = Math.ceil(numPlayers/2);
   
   //connectedPlayer = socket.id;
   clientMap.set(playerId, roomNum);
