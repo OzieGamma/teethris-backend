@@ -25,7 +25,7 @@ io.on('connection', function (socket) {
     socket.on('ready', function (msg) {
         console.log('['+localClientNumber+'] ready: ' + msg);
 
-        waitingClients.push(socket);
+        waitingClients.push(localClientNumber);
 
         if(waitingClients.length >= 2){
           io.emit('ready', 'countdown');
