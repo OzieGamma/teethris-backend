@@ -34,7 +34,7 @@ io.on('connection', function(socket){
     console.log('message: ' + msg);
     messageAuthor = socket.id;
     roomToEmit = clientMap.get(messageAuthor);
-    io.to('Room' + roomToEmit).emit('chat message', msg);
+    socket.broadcast.to('Room' + roomToEmit).emit('chat message', msg);
   });
 
   socket.on('disconnect', function(){
