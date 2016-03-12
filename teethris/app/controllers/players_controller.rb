@@ -6,4 +6,8 @@ class PlayersController < ApplicationController
 
     render status: 200, text:"ok!"
   end
+
+  def index
+    render json:Player.all
+  end
 end
