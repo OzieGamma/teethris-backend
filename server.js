@@ -16,11 +16,26 @@ app.get('/', function(req, res){
   //res.sendFile('static.html', {root:'public'});
 });
 
+app.get('/disconnectAll', function(req, res){
+  for (var i = 0; i < Object.keys(clientMap).length; i++){
+    var socketId = (Object.keys(clientMap))[i];
+
+    ((clientMap[socketId])[0]).disconnect();
+  }
+
+  console.log("Disconnect!");
+
+  res.send("yolo");
+  //res.sendFile('static.html', {root:'public'});
+});
+
 io.on('connection', function(socket){
 
   console.log('a player connected');
 
   assignToRoom(socket);
+
+
 
   socket.on('chat message', function(msg){
     console.log('message: ' + msg);
@@ -64,6 +79,7 @@ function assignToRoom(socket) {
     var c2 = lonelyPeople.pop();
 
     c1.join('Room' + numberRooms);
+
     c2.join('Room' + numberRooms);
 
     console.log('joined room: ' + numberRooms);
