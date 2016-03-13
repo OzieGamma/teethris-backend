@@ -23,14 +23,18 @@ io.on('connection', function (socket) {
     });
 
     socket.on('ready', function (msg) {
-        console.log('['+localClientNumber+'] ready: ' + msg);
+      console.log('['+localClientNumber+'] ready: ' + msg);
 
+      if(msg === "unready"){
+        waitingClients.pop();
+      } else {
         waitingClients.push(localClientNumber);
 
         if(waitingClients.length >= 2){
           io.emit('ready', 'countdown');
           waitingClients = [];
         }
+      }
     });
 });
 
